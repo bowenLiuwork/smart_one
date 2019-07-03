@@ -53,6 +53,18 @@ class _NoteBookListState extends State<NoteBookList> {
     }
   }
 
+  bool _hasNeedDeleteData() {
+    if (_list != null && _list.isNotEmpty) {
+      for (int i = 0; i < _list.length; i++) {
+        INoteItem item = _list[i];
+        if (item.isSelected()) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   _goEditPage(int noteId, {NoteEntity note}) {
     Future<bool> future = Navigator.of(context, rootNavigator: true)
         .push(new MaterialPageRoute(builder: (BuildContext context) {
@@ -96,6 +108,9 @@ class _NoteBookListState extends State<NoteBookList> {
   }
 
   _onDeleteClick() {
+    if (!_hasNeedDeleteData()) {
+      return;
+    }
     AlertDialog alertDialog = new AlertDialog(
       title: Text("确定删除数据？"),
       actions: <Widget>[
@@ -140,6 +155,15 @@ class _NoteBookListState extends State<NoteBookList> {
           height: 50,
           child: Row(
             children: <Widget>[
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                "记事本",
+                style: TextConfig.getTextStyle(
+                  size: TextConfig.CONTENT_TEXT_BIG_SIZE,
+                ),
+              ),
               Expanded(child: Container()),
               Container(
                 width: 120,
@@ -197,6 +221,10 @@ class _NoteBookListState extends State<NoteBookList> {
               ),
             ],
           ),
+        ),
+        Container(
+          height: 1,
+          color: Colors.blueGrey,
         ),
         Expanded(
             child: ListView.builder(
