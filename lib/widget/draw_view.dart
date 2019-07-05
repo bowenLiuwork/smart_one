@@ -22,7 +22,7 @@ class DrawView extends StatefulWidget {
   DrawView({
     Key key,
     @required this.size,
-    Color this.paintColor = Colors.red,
+    Color this.paintColor,
     Widget this.child,
     this.sizeChange,
     List<Dot> list,
@@ -175,15 +175,15 @@ class RenderTouchPainter extends RenderConstrainedBox {
   void performLayout() {
     super.performLayout();
     print('performLayout ---------------- $size');
-    if(sizeChange != null) {
-      sizeChange(Size(size.width ,size.height));
+    if (sizeChange != null) {
+      sizeChange(Size(size.width, size.height));
     }
   }
 
   @override
   void handleEvent(PointerEvent event, BoxHitTestEntry entry) {
     super.handleEvent(event, entry);
-    if (canTouch) {
+    if (canTouch && color != null) {
       if (event is PointerDownEvent) {
         PointerDownEvent downEvent = event;
         _path = new Path();
@@ -197,7 +197,8 @@ class RenderTouchPainter extends RenderConstrainedBox {
           _dot = null;
           Point point = _toWidgetPos(_downPoint);
           tcpControlHelper.sendStartPaintPoint(point);
-          DrawDataManager.instance.onPaintPosStart([_toTCPBlackBoardPoint(point)]);
+          DrawDataManager.instance
+              .onPaintPosStart([_toTCPBlackBoardPoint(point)]);
         }
         print('event.position === ${event.position}');
         _path.lineTo(event.position.dx, event.position.dy);

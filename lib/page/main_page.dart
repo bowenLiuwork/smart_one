@@ -2,12 +2,10 @@ import 'dart:core';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_one/business/couser_list_helper.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:smart_one/business/draw_data_helper.dart';
 import 'package:smart_one/business/socket_helper.dart';
-import 'package:smart_one/page/course_list_view.dart';
 import 'package:smart_one/page/my_course_page.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:smart_one/page/note_book_list_page.dart';
 import 'package:smart_one/page/timetable_page.txt.dart';
 import 'package:smart_one/util/device_size_manager.dart';
@@ -19,7 +17,7 @@ class MainPage extends StatefulWidget {
   }
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   List<BottomNavigationBarItem> tabBars;
   Map<int, CupertinoTabView> contentPages = new Map();
   List<IndexedWidgetBuilder> indexedWidgetBuilderList;
@@ -32,7 +30,17 @@ class _MainPageState extends State<MainPage> {
     super.initState();
     DrawDataManager.instance;
     _initTcpAddress();
+    WidgetsBinding.instance.addObserver(this);
 //    SocketHelper.instance.startHeartCheck();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    print("smart one AppLifecycleState == $state ");
+    if (state == AppLifecycleState.resumed) {
+      SocketHelper.instance.startConnect();
+    }
   }
 
   @override

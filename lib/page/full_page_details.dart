@@ -27,7 +27,7 @@ class _FullPageDetailsState extends State<FullPageDetails>
   GlobalKey drawKey = new GlobalKey();
   TcpControlHelper tcpControlHelper;
   List<Dot> _dotList = [];
-  Color _paintColor = SelectedPaintColorWidget.colors[0];
+  Color _paintColor;
   Path _path;
   Dot _dot;
 
@@ -53,7 +53,7 @@ class _FullPageDetailsState extends State<FullPageDetails>
         DeviceSizeManager.instance.getBottomStatusBarHeight();
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    if (DrawDataManager.instance.paintCmdIndex == 0) {
+    /*if (DrawDataManager.instance.paintCmdIndex == 0) {
       tcpControlHelper.controlBlackBoard(0 + 1);
     } else {
       tcpControlHelper
@@ -61,9 +61,9 @@ class _FullPageDetailsState extends State<FullPageDetails>
     }
     _paintColor = DrawDataManager.instance
         .toOurColor(DrawDataManager.instance.paintCmdIndex);
+    _onsetBoardPatin(DrawDataManager.instance.paintCmdIndex);*/
     print('_dotList == ${_dotList.length}');
     _image = DrawDataManager.instance.image;
-    _onsetBoardPatin(DrawDataManager.instance.paintCmdIndex);
     eventBus.on<Size>().listen((size) {
       print('event size ==== $size');
       setState(() {

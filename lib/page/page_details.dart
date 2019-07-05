@@ -194,11 +194,11 @@ class LearnPageState extends State<LearnPage>
                         direction: gesterDirection,
                       ),
                     ),
-                    SizedBox(
+                    /*SizedBox(
                       width: 100,
                       height: 100,
                       child: Image.memory(_image),
-                    ),
+                    ),*/
                   ],
                 ),
         ),
