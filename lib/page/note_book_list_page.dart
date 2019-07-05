@@ -102,6 +102,7 @@ class _NoteBookListState extends State<NoteBookList> {
       setState(() {
         _list = _list;
       });
+      _onCancelClick();
     } catch (e) {
       print('delete data exception --- $e');
     }

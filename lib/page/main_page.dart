@@ -9,6 +9,7 @@ import 'package:smart_one/page/course_list_view.dart';
 import 'package:smart_one/page/my_course_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:smart_one/page/note_book_list_page.dart';
+import 'package:smart_one/page/timetable_page.txt.dart';
 import 'package:smart_one/util/device_size_manager.dart';
 
 class MainPage extends StatefulWidget {
@@ -56,9 +57,7 @@ class _MainPageState extends State<MainPage> {
     });
 
     indexedWidgetBuilderList.add((context, index) {
-      return new Container(
-        color: Colors.red,
-      );
+      return TimeTablePage();
     });
     indexedWidgetBuilderList.add((context, index) {
       return new NoteBookList();
