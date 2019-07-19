@@ -21,6 +21,8 @@ class _WelcomePageState extends State<WelcomePage>
   String userLoginName = "";
   String userLoginPwd = "";
 
+  Duration _delayTime = new Duration(seconds: 3);
+
   @override
   void initState() {
     _initLoginData();
@@ -50,7 +52,7 @@ class _WelcomePageState extends State<WelcomePage>
   }
 
   _delayedGoHomePage() {
-    Future.delayed(new Duration(seconds: 5), () {
+    Future.delayed(_delayTime, () {
       _goHomePage();
     });
   }
@@ -106,11 +108,10 @@ class _WelcomePageState extends State<WelcomePage>
                   welcomeImageUrl,
                   fit: BoxFit.cover,
                 )
-              : Container(
-                  color: Colors.white,
-                  child: Center(
-                    child: Text("Weclome!",
-                        style: Theme.of(context).textTheme.display1),
+              : SizedBox.expand(
+                  child: Image.asset(
+                    'images/smart_one_welcome.jpg',
+                    fit: BoxFit.cover,
                   ),
                 ),
           constraints: new BoxConstraints.expand(),
@@ -123,7 +124,7 @@ class _WelcomePageState extends State<WelcomePage>
               child: new SkipDownTimeProgress(
                 Colors.red,
                 22.0,
-                new Duration(seconds: 5),
+                _delayTime,
                 new Size(25.0, 25.0),
                 skipText: "跳过",
                 clickListener: this,
