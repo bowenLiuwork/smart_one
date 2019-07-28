@@ -111,4 +111,12 @@ class HttpConfig {
     String res = getHttpResponse(response);
     return res;
   }
+
+  static Future<String> getLoginUserInfo(String token) async {
+    String url = getSchcemeUrl() + "/teacher/getmyinfo?token=${token}";
+    print('url == $url');
+    var response = await http.get(url);
+    String res = getHttpResponse(response);
+    return res;
+  }
 }

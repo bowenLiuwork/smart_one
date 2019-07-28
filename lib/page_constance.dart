@@ -4,6 +4,7 @@ import 'package:smart_one/page/home_page.dart';
 import 'package:smart_one/page/login_page.dart';
 import 'package:smart_one/page/main_page.dart';
 import 'package:smart_one/page/page_details.dart';
+import 'package:smart_one/page/about_page.dart';
 
 class PageConstance {
   static String WELCOME_PAGE = '/';
@@ -12,6 +13,7 @@ class PageConstance {
   static String MAIN_PAGE = '/main_page';
   static String LEARN_PAGE = '/leran_page';
   static String FULL_DRAW_PAGE = '/full_draw_page';
+  static String ABOUT_PAGE = '/about_page';
 
   static Map<String, WidgetBuilder> getRoutes() {
     var route = {
@@ -30,6 +32,9 @@ class PageConstance {
       FULL_DRAW_PAGE: (BuildContext context) {
         return FullPageDetails();
       },
+      ABOUT_PAGE: (BuildContext context) {
+        return AboutPage();
+      }
     };
 
     return route;

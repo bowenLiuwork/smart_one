@@ -8,6 +8,7 @@ import 'package:smart_one/business/socket_helper.dart';
 import 'package:smart_one/page/my_course_page.dart';
 import 'package:smart_one/page/note_book_list_page.dart';
 import 'package:smart_one/page/timetable_page.txt.dart';
+import 'package:smart_one/page/me_page.dart';
 import 'package:smart_one/util/device_size_manager.dart';
 
 class MainPage extends StatefulWidget {
@@ -71,9 +72,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
       return new NoteBookList();
     });
     indexedWidgetBuilderList.add((context, index) {
-      return new Container(
-        color: Colors.red,
-      );
+      return new MeContentPage();
     });
   }
 

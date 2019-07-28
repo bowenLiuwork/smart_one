@@ -148,19 +148,19 @@ class CouserPageState extends State<CourseListView> {
             SizedBox(
               width: 5,
             ),
-            Icon(
-              Icons.access_time,
-              color: Color(0xffd1d1d1),
-            ),
-            Text(
-              "${getDurationTime(couser.getDurationTime())}",
-              softWrap: false,
-              style: TextStyle(
-                  fontSize: TextConfig.CONTENT_TEXT_SMALL_SIZE,
-                  fontWeight: FontWeight.normal,
-                  color: Color(0xffd1d1d1),
-                  decoration: TextDecoration.none),
-            ),
+            // Icon(
+            //   Icons.access_time,
+            //   color: Color(0xffd1d1d1),
+            // ),
+            // Text(
+            //   "${getDurationTime(couser.getDurationTime())}",
+            //   softWrap: false,
+            //   style: TextStyle(
+            //       fontSize: TextConfig.CONTENT_TEXT_SMALL_SIZE,
+            //       fontWeight: FontWeight.normal,
+            //       color: Color(0xffd1d1d1),
+            //       decoration: TextDecoration.none),
+            // ),
           ],
         ),
         SizedBox(

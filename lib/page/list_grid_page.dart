@@ -21,7 +21,7 @@ class _ListGridViewState extends State<ListGridView> {
   Widget build(BuildContext context) {
     GridView gridView = GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, childAspectRatio: 16 / 9, crossAxisSpacing: 10),
+          crossAxisCount: 2, childAspectRatio: 4 / 3, crossAxisSpacing: 10),
       itemBuilder: _itemBuilder,
       itemCount: widget.data == null ? 0 : widget.data.length,
     );

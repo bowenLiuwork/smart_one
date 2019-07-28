@@ -18,6 +18,11 @@ class TcpControlHelper {
     sendTcpMessage(json);
   }
 
+  void exitLogin() {
+    String json = createChannelJson(10, '');
+    sendTcpMessage(json);
+  }
+
   ///
   ///开始上课
   ///

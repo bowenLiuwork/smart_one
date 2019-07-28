@@ -13,6 +13,7 @@ import 'package:smart_one/page/course_list_view.dart';
 import 'package:smart_one/page/page_details.dart';
 import 'package:smart_one/page/pc_login_page.dart';
 import 'package:smart_one/page/week_header_page.dart';
+import 'package:smart_one/page/exit_login_page.dart';
 
 class MyCoursePage extends StatefulWidget {
   @override
@@ -238,6 +239,21 @@ class MyCoursePageState extends State<MyCoursePage>
         }));
       }
     });
+  }
+
+  @override
+  void onPCConnectClick(bool isPcConnected) {
+    if(isPcConnected) {
+      Future<bool> futureExited = Navigator.of(context, rootNavigator: true)
+            .push(MaterialPageRoute(builder: (_) {
+          return new ExitLoginPage();
+        }));
+        futureExited.then((isExited) {
+          setState(() {
+           _isConnectedPC = false; 
+          });
+        } );
+    }
   }
 
   @override

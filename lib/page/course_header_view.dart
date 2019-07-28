@@ -25,6 +25,8 @@ class CourseHeaderView extends StatefulWidget {
 abstract class OnClickEvent {
   void onScanClick();
 
+  void onPCConnectClick(bool isPcConnected);
+
   void onSearchClick(String text);
 
   void onCalendarClick();
@@ -51,6 +53,13 @@ class CourseHeaderViewState extends State<CourseHeaderView> {
     print("_goSearch-----");
     if (widget.clickEvent != null) {
       widget.clickEvent.onSearchClick(_searchValue);
+    }
+  }
+
+  void _pcConnectClick(bool isPCConnect) {
+    print("_pcConnectClick-----");
+    if (widget.clickEvent != null) {
+      widget.clickEvent.onPCConnectClick(isPCConnect);
     }
   }
 
@@ -83,12 +92,15 @@ class CourseHeaderViewState extends State<CourseHeaderView> {
           SizedBox(
             width: 15,
           ),
-          ImageIcon(
+          GestureDetector(onTap: () {
+            _pcConnectClick(widget.isConnected);
+          }, child: ImageIcon(
             widget.isConnected
                 ? AssetImage("images/pc_connected.png")
                 : AssetImage("images/pc_disconnected.png"),
             color: widget.isConnected ? Color(0xff3a93fb) : Color(0xff767676),
-          ),
+          ),),
+          
           Expanded(
               child: Container(
             padding: EdgeInsets.symmetric(horizontal: 15),
