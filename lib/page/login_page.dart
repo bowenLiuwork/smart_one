@@ -38,9 +38,7 @@ class _LoginState extends State<LoginPage> {
     super.initState();
   }
 
-  void initCacheUser() {
-
-  }
+  void initCacheUser() {}
 
   void _goLogin() {
     print("go login-------");
@@ -142,33 +140,157 @@ class _LoginState extends State<LoginPage> {
   }
 
   Widget buildBody(BuildContext context) {
+    Column column = Column(
+      children: <Widget>[
+        SizedBox(
+          height: 40,
+        ),
+        buildTitleImage(),
+        SizedBox(
+          height: 20,
+        ),
+        buildUserAccountTextField(),
+        SizedBox(
+          height: 20,
+        ),
+        buildPasswordTextField(context),
+        SizedBox(
+          height: 40,
+        ),
+        buildLoginButton(),
+        SizedBox(
+          height: 10,
+        ),
+        buildBelowLogin(),
+        Expanded(
+          child: Container(),
+        ),
+        Container(
+          height: 30,
+          child: Row(
+            children: <Widget>[
+              FlatButton(
+                  onPressed: () {
+                    _setServerClick();
+                  },
+                  child: Text(
+                    "服务器设置",
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w300,
+                        color: Colors.black38,
+                        decoration: TextDecoration.none),
+                  )),
+              Expanded(
+                child: Container(),
+              )
+            ],
+          ),
+        )
+      ],
+    );
     return Form(
         key: _formKey,
-        child: ListView(
+        child: Container(
           padding: EdgeInsets.symmetric(horizontal: 22.0),
-          children: <Widget>[
-            SizedBox(
-              height: 40,
-            ),
-            buildTitleImage(),
-            SizedBox(
-              height: 20,
-            ),
-            buildUserAccountTextField(),
-            SizedBox(
-              height: 20,
-            ),
-            buildPasswordTextField(context),
-            SizedBox(
-              height: 40,
-            ),
-            buildLoginButton(),
-            SizedBox(
-              height: 10,
-            ),
-            buildBelowLogin(),
-          ],
+          child: column,
         ));
+  }
+
+  void _setServerClick() async {
+    TextEditingController _textEditingController = TextEditingController();
+    _textEditingController.text = await HttpConfig.getSchcemeUrl();
+
+    int length = _textEditingController.text.length;
+    _textEditingController.selection =
+        TextSelection(baseOffset: 0, extentOffset: length);
+
+    //监听输入改变
+    _textEditingController.addListener(() {
+      print('Controller监听：${_textEditingController.text}');
+    });
+
+    TextField inputField = TextField(
+      controller: _textEditingController,
+      keyboardType: TextInputType.text,
+      maxLines: 2,
+      style: TextStyle(
+        color: Colors.black,
+        fontSize: 20,
+      ),
+      onChanged: (text) {
+        print(text);
+      },
+      onEditingComplete: () {
+        print('完成后：${_textEditingController.text}');
+      },
+      enabled: true,
+      decoration: InputDecoration(
+          hintText: "请输入服务器地址", contentPadding: EdgeInsets.all(10)),
+    );
+
+    showDialog(
+        context: context,
+        builder: (context) {
+          Container container = Container(
+            color: Colors.white,
+            child: Column(
+              children: <Widget>[
+                inputField,
+                SizedBox(
+                  height: 50,
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: FlatButton(
+                            onPressed: () {
+                              Navigator.of(context, rootNavigator: true).pop();
+                            },
+                            child: Text(
+                              "取消",
+                              style: TextStyle(color: Colors.red),
+                            )),
+                      ),
+                      SizedBox(
+                        width: 1,
+                        child: Container(
+                          color: Colors.teal,
+                        ),
+                      ),
+                      Expanded(
+                          child: FlatButton(
+                              onPressed: () {
+                                String schemeUrl = _textEditingController.text;
+                                print("save click $schemeUrl");
+                                HttpConfig.setAndSaveSchemeUrl(schemeUrl);
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
+                              },
+                              child: Text(
+                                "确定",
+                                style: TextStyle(color: Colors.black),
+                              ))),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+
+          var w = Material(
+            type: MaterialType.transparency,
+            child: Center(
+              child: SizedBox(
+                height: 120,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 25, right: 25),
+                  child: container,
+                ),
+              ),
+            ),
+          );
+          return w;
+        });
   }
 
   Widget buildLoginButton() {
