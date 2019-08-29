@@ -296,6 +296,7 @@ class _LoginState extends State<LoginPage> {
   Widget buildLoginButton() {
     SizedBox box = new SizedBox(
       height: 45,
+      width: double.maxFinite,
       child: CupertinoButton(
           child: Text(
             "登录",

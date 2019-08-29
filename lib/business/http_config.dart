@@ -64,7 +64,7 @@ class HttpConfig {
 
   static Future<String> getTcpServer(String token) async {
     String tcpUrl =
-        "${getSchcemeUrl()}" + "/teacher/gettcpserver?token=${token}";
+        await getSchcemeUrl() + "/teacher/gettcpserver?token=${token}";
     print('get tcp url == ' + tcpUrl);
     var response = await http.get(tcpUrl);
     String body = getHttpResponse(response);
