@@ -1,3 +1,5 @@
+import 'package:smart_one/model/teacher_info.dart';
+
 class UserInfoManager {
   //单例 --------
   factory UserInfoManager() => _getInstance();
@@ -20,6 +22,22 @@ class UserInfoManager {
 //-------------------
 
   String _token;
+
+  bool _isHighSchoolVersion = false;
+
+  bool get isHighSchoolVersion => _isHighSchoolVersion;
+
+  TeacherInfo _teacherInfo;
+
+  TeacherInfo get teacherInfo => _teacherInfo;
+
+  set teacherInfo(TeacherInfo value) {
+    _teacherInfo = value;
+  }
+
+  void setHighSchoolVersion(bool value) {
+    _isHighSchoolVersion = value;
+  }
 
   String getToken() {
     return _token;

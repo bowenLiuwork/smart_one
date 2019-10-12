@@ -14,11 +14,11 @@ class CourseListHelper {
         week, 0, UserInfoManager.instance.getToken());
     print(res);
     List<ICourse> courseList = [];
-    if(res != null && res.isNotEmpty) {
+    if (res != null && res.isNotEmpty) {
       var resJson = json.decode(res);
       var list = resJson['data'];
-      if(list != null) {
-        for(var item in list) {
+      if (list != null) {
+        for (var item in list) {
           courseList.add(TeachCourse.createFromJson(json.encode(item)));
         }
       }
@@ -26,8 +26,27 @@ class CourseListHelper {
     return courseList;
   }
 
-  static Future<WeekTimeInfo> getCurrentWeek() async{
-    String res = await HttpConfig.getCurrentWeekClassWareInfo( UserInfoManager.instance.getToken());
+  static Future<List<ICourse>> getCourseListByPage(int page) async {
+    String teacherNum = UserInfoManager.instance.teacherInfo.teacherNum;
+    String res = await HttpConfig.getCourseWareByTeacherAndPage(
+        page, teacherNum, 0, UserInfoManager.instance.getToken());
+    print(res);
+    List<ICourse> courseList = [];
+    if (res != null && res.isNotEmpty) {
+      var resJson = json.decode(res);
+      var list = resJson['data'];
+      if (list != null) {
+        for (var item in list) {
+          courseList.add(TeachCourse.createFromJson(json.encode(item)));
+        }
+      }
+    }
+    return courseList;
+  }
+
+  static Future<WeekTimeInfo> getCurrentWeek() async {
+    String res = await HttpConfig.getCurrentWeekClassWareInfo(
+        UserInfoManager.instance.getToken());
     var resJson = json.decode(res);
     int weekCount = resJson['currentteachweek'];
     int beginDateTime = resJson['begindate'];

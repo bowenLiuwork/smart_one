@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:smart_one/business/http_config.dart';
 import 'package:smart_one/business/login_data_helper.dart';
 import 'package:smart_one/business/user_info_manager.dart';
+import 'package:smart_one/model/teacher_info.dart';
 import 'package:smart_one/page_constance.dart';
 import 'package:smart_one/util/back_page_utils.dart';
 import 'package:smart_one/util/text_config.dart';
@@ -95,6 +96,14 @@ class _LoginState extends State<LoginPage> {
       Map<String, dynamic> data = json.decode(res);
       String token = data['token'];
       UserInfoManager.instance.setToken(token);
+      try {
+        String teacherInfo = await HttpConfig.getLoginUserInfo(token);
+        Map<String, dynamic> teacherJson = json.decode(teacherInfo)['data'];
+        TeacherInfo info = TeacherInfo.createFromJson(teacherJson);
+        UserInfoManager.instance.teacherInfo = info;
+      } catch (e) {
+        print(e);
+      }
     }
     return res;
   }

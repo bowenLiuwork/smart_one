@@ -14,6 +14,7 @@ import 'package:smart_one/page/page_details.dart';
 import 'package:smart_one/page/pc_login_page.dart';
 import 'package:smart_one/page/week_header_page.dart';
 import 'package:smart_one/page/exit_login_page.dart';
+import 'package:smart_one/widget/page_header_bar.dart';
 
 class MyCoursePage extends StatefulWidget {
   @override
@@ -30,6 +31,7 @@ class MyCoursePageState extends State<MyCoursePage>
   List<ICourse> weekCourseList = [];
   TcpControlHelper tcpControlHelper;
   bool _isConnectedPC = false;
+  int curPage = 1;
 
   @override
   void initState() {
@@ -40,7 +42,11 @@ class MyCoursePageState extends State<MyCoursePage>
     SocketHelper.instance.setMessageCallBack(
         onWeekChange: _onWeekChange, onStartCourse: _onStartCourse);
     super.initState();
-    _initWeekParams();
+    if(UserInfoManager.instance.isHighSchoolVersion) {
+      _initPageCourseData(0);
+    }else {
+      _initWeekParams();
+    }
   }
 
   _onWeekChange(int week) {
@@ -112,6 +118,22 @@ class MyCoursePageState extends State<MyCoursePage>
     _initWeekCourseData();
   }
 
+  _initPageCourseData(int page) async {
+    List<ICourse> list = await CourseListHelper.getCourseListByPage(page);
+    setState(() {
+      weekCourseList = list == null ? [] : list;
+    });
+  }
+
+  _onPageChanged(int page) {
+    curPage = page;
+    int temp = page - 1;
+    if (temp < 0) {
+      temp = 0;
+    }
+    _initPageCourseData(temp);
+  }
+
   @override
   Widget build(BuildContext context) {
     Column column = Column(
@@ -120,20 +142,25 @@ class MyCoursePageState extends State<MyCoursePage>
           isConnected: _isConnectedPC,
           clickEvent: this,
         ),
-        WeekHeaderView(
-          weekIndex: curWeek,
-          startTime: startTime,
-          endTime: endTime,
-          onchange: (week, start, end) {
-            tcpControlHelper.controlWeek(week);
-            _initWeekCourseData(week: week);
-            setState(() {
-              curWeek = week;
-              startTime = start;
-              endTime = end;
-            });
-          },
-        ),
+        UserInfoManager.instance.isHighSchoolVersion
+            ? PageHeaderView(
+                pageIndex: curPage,
+                onchange: _onPageChanged,
+              )
+            : WeekHeaderView(
+                weekIndex: curWeek,
+                startTime: startTime,
+                endTime: endTime,
+                onchange: (week, start, end) {
+                  tcpControlHelper.controlWeek(week);
+                  _initWeekCourseData(week: week);
+                  setState(() {
+                    curWeek = week;
+                    startTime = start;
+                    endTime = end;
+                  });
+                },
+              ),
         SizedBox(
           height: 1,
           child: Container(
@@ -213,11 +240,19 @@ class MyCoursePageState extends State<MyCoursePage>
         firstDate: firstDate,
         lastDate: lastDate);
     future.then((date) {
-      if (date.millisecondsSinceEpoch < startTime ) {
-        int weekIndex = Duration(milliseconds: startTime - date.millisecondsSinceEpoch).inDays ~/ 7 + 1;
+      if (date.millisecondsSinceEpoch < startTime) {
+        int weekIndex =
+            Duration(milliseconds: startTime - date.millisecondsSinceEpoch)
+                        .inDays ~/
+                    7 +
+                1;
         _onWeekChange(curWeek - weekIndex);
-      }else if(date.millisecondsSinceEpoch > endTime){
-        int weekIndex = Duration(milliseconds: date.millisecondsSinceEpoch - endTime).inDays ~/ 7 + 1;
+      } else if (date.millisecondsSinceEpoch > endTime) {
+        int weekIndex =
+            Duration(milliseconds: date.millisecondsSinceEpoch - endTime)
+                        .inDays ~/
+                    7 +
+                1;
         _onWeekChange(curWeek + weekIndex);
       }
     });
@@ -243,16 +278,16 @@ class MyCoursePageState extends State<MyCoursePage>
 
   @override
   void onPCConnectClick(bool isPcConnected) {
-    if(isPcConnected) {
+    if (isPcConnected) {
       Future<bool> futureExited = Navigator.of(context, rootNavigator: true)
-            .push(MaterialPageRoute(builder: (_) {
-          return new ExitLoginPage();
-        }));
-        futureExited.then((isExited) {
-          setState(() {
-           _isConnectedPC = false; 
-          });
-        } );
+          .push(MaterialPageRoute(builder: (_) {
+        return new ExitLoginPage();
+      }));
+      futureExited.then((isExited) {
+        setState(() {
+          _isConnectedPC = false;
+        });
+      });
     }
   }
 

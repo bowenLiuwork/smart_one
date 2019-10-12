@@ -5,10 +5,12 @@ import 'package:smart_one/page/login_page.dart';
 import 'package:smart_one/page/main_page.dart';
 import 'package:smart_one/page/page_details.dart';
 import 'package:smart_one/page/about_page.dart';
+import 'package:smart_one/page/select_school_page.dart';
 
 class PageConstance {
   static String WELCOME_PAGE = '/';
   static String HOME_PAGE = '/home';
+  static String SELECT_SCHOOL_PAGE = '/school_list_page';
   static String LOGIN_PAGE = '/login_page';
   static String MAIN_PAGE = '/main_page';
   static String LEARN_PAGE = '/leran_page';
@@ -20,6 +22,9 @@ class PageConstance {
       HOME_PAGE: (BuildContext context) {
         return MyHomePage(title: 'demo app');
       },
+      SELECT_SCHOOL_PAGE: (BuildContext context) {
+        return SelectSchoolPage();
+      },
       LOGIN_PAGE: (BuildContext context) {
         return LoginPage();
       },
@@ -27,7 +32,9 @@ class PageConstance {
         return MainPage();
       },
       LEARN_PAGE: (BuildContext context) {
-        return LearnPage(courseId: null,);
+        return LearnPage(
+          courseId: null,
+        );
       },
       FULL_DRAW_PAGE: (BuildContext context) {
         return FullPageDetails();

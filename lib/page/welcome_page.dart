@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:smart_one/business/http_config.dart';
 import 'package:smart_one/business/login_data_helper.dart';
 import 'package:smart_one/common/skip_down_time.dart';
 import 'package:smart_one/page/login_page.dart';
@@ -57,11 +58,15 @@ class _WelcomePageState extends State<WelcomePage>
     });
   }
 
-  _goHomePage() {
+  _goHomePage() async {
     print("-------------- ${isLoginActive}");
+    String schoolNum = await HttpConfig.getSchoolNum();
     if (isLoginActive) {
       Navigator.of(context).pushNamedAndRemoveUntil(
           PageConstance.HOME_PAGE, (Route<dynamic> route) => false);
+    } else if (schoolNum == null || schoolNum.isEmpty) {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          PageConstance.SELECT_SCHOOL_PAGE, (Route<dynamic> route) => false);
     } else {
       Navigator.of(context).pushAndRemoveUntil(
           new MaterialPageRoute(builder: (context) {

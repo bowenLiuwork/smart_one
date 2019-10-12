@@ -77,10 +77,12 @@ class CouserPageState extends State<CourseListView> {
             width: 95,
             child: AspectRatio(
               aspectRatio: 9 / 6,
-              child: ExtendedImage.network(
-                  couser.getCourseImage(),
-                fit: BoxFit.fitWidth,
-              ),
+              child: couser.getCourseImage() == null
+                  ? Icon(Icons.crop_original, color: Colors.blueGrey, size: 80,)
+                  : ExtendedImage.network(
+                      couser.getCourseImage(),
+                      fit: BoxFit.fitWidth,
+                    ),
             ),
           ),
           SizedBox(
@@ -175,10 +177,13 @@ class CouserPageState extends State<CourseListView> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(5))),
               color: Color(0xff19b2fe),
-              icon: SizedBox(height: 12,child: ImageIcon(
-                AssetImage("images/icon_start_course.png"),
-                color: Colors.white,
-              ),),
+              icon: SizedBox(
+                height: 12,
+                child: ImageIcon(
+                  AssetImage("images/icon_start_course.png"),
+                  color: Colors.white,
+                ),
+              ),
               label: Text(
                 "开始上课",
                 style: TextStyle(
