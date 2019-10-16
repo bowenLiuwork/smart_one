@@ -1,3 +1,4 @@
+import 'package:smart_one/model/classes_info.dart';
 import 'package:smart_one/model/teacher_info.dart';
 
 class UserInfoManager {
@@ -30,6 +31,15 @@ class UserInfoManager {
   TeacherInfo _teacherInfo;
 
   TeacherInfo get teacherInfo => _teacherInfo;
+
+  List<ClassesInfo> _teacherClassesInfoList;
+
+
+  List<ClassesInfo> get teacherClassesInfoList => _teacherClassesInfoList;
+
+  set teacherClassesInfoList(List<ClassesInfo> value) {
+    _teacherClassesInfoList = value;
+  }
 
   set teacherInfo(TeacherInfo value) {
     _teacherInfo = value;

@@ -7,6 +7,7 @@ import 'package:smart_one/business/http_config.dart';
 import 'package:smart_one/business/socket_helper.dart';
 import 'package:smart_one/business/tcp_control_helper.dart';
 import 'package:smart_one/business/user_info_manager.dart';
+import 'package:smart_one/model/classes_info.dart';
 import 'package:smart_one/model/week_info.dart';
 import 'package:smart_one/page/course_header_view.dart';
 import 'package:smart_one/page/course_list_view.dart';
@@ -42,9 +43,9 @@ class MyCoursePageState extends State<MyCoursePage>
     SocketHelper.instance.setMessageCallBack(
         onWeekChange: _onWeekChange, onStartCourse: _onStartCourse);
     super.initState();
-    if(UserInfoManager.instance.isHighSchoolVersion) {
+    if (UserInfoManager.instance.isHighSchoolVersion) {
       _initPageCourseData(0);
-    }else {
+    } else {
       _initWeekParams();
     }
   }
@@ -71,9 +72,17 @@ class MyCoursePageState extends State<MyCoursePage>
 
   _onStartCourse(String courseId) {
     print('courseId --- $courseId');
-    ICourse course = findCourseById(courseId);
-    if (course != null) {
-      _goCoursePage(course);
+    if (courseId != null) {
+      bool isContainClassesInfo = courseId.contains(";");
+      String tempId = courseId;
+      if (isContainClassesInfo) {
+        List<String> arr = courseId.split(";");
+        tempId = arr[0];
+      }
+      ICourse course = findCourseById(tempId);
+      if (course != null) {
+        _goCoursePage(course);
+      }
     }
   }
 
@@ -171,8 +180,12 @@ class MyCoursePageState extends State<MyCoursePage>
             child: CourseListView(
           list: weekCourseList,
           onItemClick: (pos) {
-            tcpControlHelper.controlStartClass(weekCourseList[pos].getId());
-            _goCoursePage(weekCourseList[pos]);
+            if (UserInfoManager.instance.isHighSchoolVersion) {
+              _onHighSchoolCourseClick(pos);
+            } else {
+              tcpControlHelper.controlStartClass(weekCourseList[pos].getId());
+              _goCoursePage(weekCourseList[pos]);
+            }
           },
         )),
       ],
@@ -183,6 +196,64 @@ class MyCoursePageState extends State<MyCoursePage>
       child: column,
     );
     return container;
+  }
+
+  _goClassesCourse(ICourse course, ClassesInfo info) {
+    tcpControlHelper.controlStartClass("${course.getId()};${info.id}");
+    _goCoursePage(course);
+  }
+
+  void _onHighSchoolCourseClick(int pos) {
+    List<ClassesInfo> infoList =
+        UserInfoManager.instance.teacherClassesInfoList;
+    if (infoList != null) {
+      List<Widget> listW = [];
+      listW.add(SizedBox(
+        height: 1,
+        child: Container(
+          color: Colors.grey,
+        ),
+      ));
+      for (int i = 0; i < infoList.length; i++) {
+        ClassesInfo info = infoList[i];
+        listW.add(ListTile(
+          title: Center(
+            child: Text("${info.classesName}"),
+          ),
+          onTap: () {
+            print("info ==== ${info.classesName}");
+            Navigator.of(context, rootNavigator: true).pop();
+            _goClassesCourse(weekCourseList[pos], info);
+          },
+        ));
+        if (i != infoList.length - 1) {
+          listW.add(SizedBox(
+            height: 1,
+            child: Container(
+              color: Colors.grey,
+            ),
+          ));
+        }
+      }
+      showDialog(
+          context: context,
+          builder: (context) {
+            return SimpleDialog(
+              title: Center(
+                child: Text("选择班级"),
+              ),
+              titlePadding: EdgeInsets.all(10),
+              backgroundColor: Colors.white,
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(6))),
+              children: listW,
+            );
+          });
+    } else {
+      tcpControlHelper.controlStartClass(weekCourseList[pos].getId());
+      _goCoursePage(weekCourseList[pos]);
+    }
   }
 
   void _goCoursePage(ICourse course) {

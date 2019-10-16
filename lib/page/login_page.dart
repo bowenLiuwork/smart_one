@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:smart_one/business/http_config.dart';
 import 'package:smart_one/business/login_data_helper.dart';
 import 'package:smart_one/business/user_info_manager.dart';
+import 'package:smart_one/model/classes_info.dart';
 import 'package:smart_one/model/teacher_info.dart';
 import 'package:smart_one/page_constance.dart';
 import 'package:smart_one/util/back_page_utils.dart';
@@ -101,6 +102,17 @@ class _LoginState extends State<LoginPage> {
         Map<String, dynamic> teacherJson = json.decode(teacherInfo)['data'];
         TeacherInfo info = TeacherInfo.createFromJson(teacherJson);
         UserInfoManager.instance.teacherInfo = info;
+        if (UserInfoManager.instance.isHighSchoolVersion) {
+          String tClassInfoRes =
+              await HttpConfig.getTeacherClasses(token, info.teacherNum);
+          print("tClassInfoRes = $tClassInfoRes");
+          List temp = json.decode(tClassInfoRes)['data'];
+          List<ClassesInfo> classesList = [];
+          for (var item in temp) {
+            classesList.add(ClassesInfo.createFromJson(item));
+          }
+          UserInfoManager.instance.teacherClassesInfoList = classesList;
+        }
       } catch (e) {
         print(e);
       }

@@ -105,6 +105,15 @@ class HttpConfig {
     return null;
   }
 
+  static Future<String> getTeacherClasses(
+      String token, String teacherno) async {
+    String url = await getSchcemeUrl() +
+        "/teacher/getteacherclasses?token=$token&teacherno=$teacherno";
+    var response = await http.get(url);
+    String body = getHttpResponse(response);
+    return body;
+  }
+
   static Future<String> getLoginUrl(String userName, String password) async {
     String appUrl = await getSchcemeUrl();
     String url =
